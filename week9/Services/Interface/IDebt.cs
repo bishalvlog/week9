@@ -5,8 +5,10 @@ namespace week9.Services.Interface
 {
     public interface IDebt
     {
-        void AddDebt(CreateDebtDto debt);
+        Task AddDebt(CreateDebtDto debt);
 
         List<Debt> GetAllDebt();
+
+        Debt GetById(Guid id);
     }
 }

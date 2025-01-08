@@ -1,4 +1,5 @@
 ﻿@page "/debt"
+@using week9.Components.Dialog
 @using week9.Components.Layout
 
 @if(debts == null)
@@ -9,14 +10,16 @@ else
 {
     <MudPaper Class="p-4">
         <MudText Typo="Typo.h5" GutterBottom>Manage Tags</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTagRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Tag</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenDebtRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Ddbt</MudButton>
         
         <div class="table-responsive">
             <table class="table country-table">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>TagName</th>
+                        <th>SourceOfDebt</th>
+                        <th>DebtAmount</th>
+                        <th>DeuDate</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -26,21 +29,18 @@ else
                     {
                         <tr>
                             <td>@(debts.IndexOf(item) + 1).</td>
+                            <td>@item.DebtSource</td>
+                            <td>@item.DebtAmount.ToString("C")</td>
+                            <td>@item.DeuDate.ToString("yyyy-MM-dd")</td>
                             <td>
-                                <div class="d-flex align-items-center gap-3">
-                                    <Avatar Name="@item"/>
-                                    @item.
-                                </div>
-                            </td>
-                            <td>
-                                <ActivationStatus IsActive="@item.IsActive" />
+                                <ActivationStatus IsActive="@item.IsCleard"/>
                             </td>
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
                                     </MudTooltip>
-                                    <MudTooltip Text="@(item.IsActive ? "Deactivate" : "Activate")" Color="Color.Primary" Arrow="true">
+                                    <MudTooltip Text="@(item.IsActive ? "Active" : "Deactive")" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18" @onclick="() => OpenTagDeleteModal(item.Id)" />
                                     </MudTooltip>
                                 </div>
@@ -51,4 +51,28 @@ else
             </table>
         </div>
     </MudPaper>
+}
+@if (IsCreateModalOpen)
+{
+    <ModalLayout Module="Debt"
+                 Title="Add Debts"
+                 Description="Add a new Debts"
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="AddRegisterDebt"
+                 CancelLabel="Discard"
+                 SubmitLabel="Save"
+                 IsDisabled="IsCreateButtonDisabled"
+                 IsVisible="@IsCreateModalOpen"
+                 IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField Label="Source Debts" 
+                        @bind-Value="CreateDebtDto.DebtSource"
+                        Required="true" 
+                        Variant="Variant.Outlined"/>
+                </MudItem>
+             @*   to be continues *@
+            </MudGrid>
+     </ModalLayout>
 }

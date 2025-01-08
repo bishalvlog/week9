@@ -13,7 +13,7 @@ namespace week9.Services
         {
             _debtList = LoadItems();
         }
-        public void AddDebt(CreateDebtDto debt)
+        public async Task AddDebt(CreateDebtDto debt)
         {
             try
             {
@@ -37,7 +37,12 @@ namespace week9.Services
 
         public List<Debt> GetAllDebt()
         {
-            throw new NotImplementedException();
+           return _debtList.ToList();
+        }
+
+        public Debt GetById(Guid id)
+        {
+            return _debtList.FirstOrDefault(d => d.Id == id);
         }
     }
 }
