@@ -11,6 +11,7 @@
 }
 else
 {
+    <Back/>
     <MudPaper Class="p-4">
         <MudText Typo="Typo.h5" GutterBottom>Manage Tags</MudText>
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTagRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Tag</MudButton>
@@ -32,7 +33,7 @@ else
                             <td>@(Tags.IndexOf(item) + 1).</td>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <Avatar Name="@item.TagName"/>
+                                    <MudAvatar Name="@item.TagName"/>
                                     @item.TagName
                                 </div>
                             </td>

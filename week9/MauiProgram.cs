@@ -23,6 +23,7 @@ namespace week9
             // service inject 
             builder.Services.AddScoped<IUser, UserService>();
             builder.Services.AddScoped<ITag, TagService>();
+            builder.Services.AddScoped<IDebt, DebtService>();
            // builder.Services.AddScoped<ISnackbarService>();
     		builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Services.AddMudServices();

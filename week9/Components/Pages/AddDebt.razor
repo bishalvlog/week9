@@ -1,6 +1,7 @@
 ﻿@page "/debt"
 @using week9.Components.Dialog
 @using week9.Components.Layout
+@using week9.Model.Constants
 
 @if(debts == null)
 {
@@ -8,9 +9,10 @@
 }
 else
 {
+    <Back/>
     <MudPaper Class="p-4">
-        <MudText Typo="Typo.h5" GutterBottom>Manage Tags</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenDebtRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Ddbt</MudButton>
+        <MudText Typo="Typo.h5" GutterBottom>Manage Debts</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenDebtRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Debt</MudButton>
         
         <div class="table-responsive">
             <table class="table country-table">
@@ -41,7 +43,7 @@ else
                                         <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
                                     </MudTooltip>
                                     <MudTooltip Text="@(item.IsActive ? "Active" : "Deactive")" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18" @onclick="() => OpenTagDeleteModal(item.Id)" />
+                                        <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18" @onclick="() => OpenDebtDeleteModal(item.Id)" />
                                     </MudTooltip>
                                 </div>
                             </td>
@@ -52,6 +54,7 @@ else
         </div>
     </MudPaper>
 }
+
 @if (IsCreateModalOpen)
 {
     <ModalLayout Module="Debt"
@@ -67,12 +70,40 @@ else
                  IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField Label="Source Debts" 
-                        @bind-Value="CreateDebtDto.DebtSource"
-                        Required="true" 
-                        Variant="Variant.Outlined"/>
+                    <MudTextField Label="Debt Source" @bind-Value="CreateDebtDto.DebtSource" Required="true" Variant="Variant.Outlined"/>
                 </MudItem>
-             @*   to be continues *@
+                <MudItem xs="12">
+                    <MudTextField Label="Debt Amount" @bind-Value="CreateDebtDto.DebtAmount" Required="true" Variant="Variant.Outlined"/>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Due Date" @bind-Value="CreateDebtDto.DeuDate" Required="true" Variant="Variant.Outlined"/> 
+                    </MudItem> 
             </MudGrid>
-     </ModalLayout>
+    </ModalLayout>
+}
+
+@if (IsDeleteModalOpen)
+{
+    <ModalLayout Module="Tag"
+                 Title="Delete Tag"
+                 Description="Are you sure you want to delete this tag?"
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="@DeleteTag"
+                 CancelLabel="Discard"
+                 SubmitLabel="@(DeleteDebt.IsActive ? "Deactivate" : "Activate")"
+                 IsDisabled="IsDeleteModalOpen"
+                 IsVisible="@IsDeleteModalOpen"
+                 IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
+        <div class="text-center">
+            <LoadIcon Height="200"
+                      Width="200"
+                      Icon="@(DeleteDebt.IsActive ? Animations.Regular.Trash : Animations.Regular.Edit)"
+                      State="hover-pinch"
+                      Trigger="loop" />
+            <MudText Class="hfs4 data fw-600">
+                Are you sure you want to @(DeleteDebt.IsActive ? "deactivate" : "activate") the following Tag?
+            </MudText>
+        </div>
+    </ModalLayout>
 }

@@ -5,13 +5,14 @@ namespace week9.Components.Pages
 {
     public partial class AddDebt
     {
-        private List<Debt> debts {  get; set; }
+        private List<Debt>? debts { get; set; } = new();
 
+        #region Oninitialize
         protected override async Task OnInitializedAsync()
         {
             await GetAllDebt();
         }
-
+        #endregion
         private async Task OpenUpdateDebtModal(Guid TagId)
         {
             var response = UserDebt.GetById(TagId);
@@ -29,7 +30,7 @@ namespace week9.Components.Pages
 
             if (response is null)
             {
-
+                return;
             }
 
             response = debts;
@@ -37,7 +38,6 @@ namespace week9.Components.Pages
         #endregion
 
         #region AddDebt
-
         private bool IsCreateButtonDisabled =>
         string.IsNullOrEmpty(CreateDebtDto.DebtSource) ||
         string.IsNullOrEmpty(CreateDebtDto.DeuDate.ToString()) ||
@@ -83,7 +83,7 @@ namespace week9.Components.Pages
 
         private Debt DeleteDebt { get; set; } = new();
 
-        private async Task OpenTagDeleteModal(Guid Id)
+        private async Task OpenDebtDeleteModal(Guid Id)
         {
             var response = UserDebt.GetById(Id);
 
