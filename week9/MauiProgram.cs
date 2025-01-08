@@ -22,6 +22,8 @@ namespace week9
 #if DEBUG
             // service inject 
             builder.Services.AddScoped<IUser, UserService>();
+            builder.Services.AddScoped<ITag, TagService>();
+           // builder.Services.AddScoped<ISnackbarService>();
     		builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Services.AddMudServices();
             builder.Logging.AddDebug();

@@ -1,0 +1,54 @@
+﻿@page "/debt"
+@using week9.Components.Layout
+
+@if(debts == null)
+{
+    <Loader/>
+}
+else
+{
+    <MudPaper Class="p-4">
+        <MudText Typo="Typo.h5" GutterBottom>Manage Tags</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTagRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Tag</MudButton>
+        
+        <div class="table-responsive">
+            <table class="table country-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>TagName</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in debts)
+                    {
+                        <tr>
+                            <td>@(debts.IndexOf(item) + 1).</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <Avatar Name="@item"/>
+                                    @item.
+                                </div>
+                            </td>
+                            <td>
+                                <ActivationStatus IsActive="@item.IsActive" />
+                            </td>
+                            <td>
+                                <div class="action">
+                                    <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
+                                    </MudTooltip>
+                                    <MudTooltip Text="@(item.IsActive ? "Deactivate" : "Activate")" Color="Color.Primary" Arrow="true">
+                                        <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18" @onclick="() => OpenTagDeleteModal(item.Id)" />
+                                    </MudTooltip>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </MudPaper>
+}

@@ -1,25 +1,35 @@
 ﻿using System.Text.Json;
-using week9.Model;
 
 namespace week9.Abstraction
 {
-    public abstract class UserBase
+    public abstract class UserBase<T>
     {
-        protected static readonly string FilePath = Path.Combine(FileSystem.AppDataDirectory, "users.json");
-        protected List<User> LoadUsers()
+        private readonly string FilePath;
+
+        protected UserBase(string fileName)
         {
-            if (!File.Exists(FilePath)) return new List<User>();
-
-            var json = File.ReadAllText(FilePath);
-
-            return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+            FilePath = Path.Combine(FileSystem.AppDataDirectory, fileName); 
+            EnsureDirectoryExists();
         }
 
-        protected void SaveUsers(List<User> users)
+        private void EnsureDirectoryExists()
         {
-            
-            var json = JsonSerializer.Serialize(users);
+            var directory = Path.GetDirectoryName(FilePath); 
+            if (!Directory.Exists(directory)) 
+            { 
+                Directory.CreateDirectory(directory);
+            } 
+        }
 
+        protected List<T> LoadItems() 
+        { 
+            if (!File.Exists(FilePath)) return new List<T>();
+            var json = File.ReadAllText(FilePath);
+            return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+        }
+        protected void SaveItems(List<T> items)
+        { 
+            var json = JsonSerializer.Serialize(items);
             File.WriteAllText(FilePath, json);
         }
     }

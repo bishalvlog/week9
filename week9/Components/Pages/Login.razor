@@ -1,30 +1,27 @@
 ﻿@page "/login"
 @using week9.Model
+@using week9.Base
 
 <div class="form-login">
     <form class="text-center" @onsubmit="HandleLogin">
-        <img class="mb-4" src="/appicon.png" alt="" height="72">
-        <h1 class="h3 mb-3 fw-normal">Please Login</h1>
+        <MudCard Class="p-4 text-center" Elevation="3">
+            <MudText Typo="Typo.h3" GutterBottom>Please Login</MudText>
+            <MudTextField @bind-Value="Users.UserName" Label="Username" Variant="Variant.Filled" Required="true" />
+            <MudTextField @bind-Value="Users.Password" Label="Password" Variant="Variant.Filled" InputType="InputType.Password" Required="true" />
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" @bind="Users.UserName" placeholder="Username" />
-            <label for="floatingInput">Username</label>
-        </div>
+            <MudSelect T ="Currency" Label="Select Currency" @bind-Value="Users.Currency" Variant="Variant.Filled" Required="true">
+                @foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+                {
+                    <MudSelectItem T="Currency" Value="currency">@currency</MudSelectItem>
+                } 
+            </MudSelect>
 
-        <!-- Password Input -->
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control" @bind="Users.Password" placeholder="Password" />
-            <label for="floatingPassword">Password</label>
-        </div>
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Elevation="0">@ErrorMessage</MudAlert>
+            }
 
-        @if (!string.IsNullOrEmpty(ErrorMessage))
-        {
-            <div class="alert alert-danger">@ErrorMessage</div>
-        }
-        <button class="btn btn-lg btn-primary">
-            Login
-        </button>
-       
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" ButtonType="ButtonType.Submit"> Login</MudButton>
+        </MudCard>
     </form>
-</div>
-
+ </div>

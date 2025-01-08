@@ -4,7 +4,7 @@ namespace week9.Model
 {
     public class User
     {
-        public Guid UserId { get; set; }    
+        public Guid UserId { get; set; } = new Guid();
 
         public string UserName { get; set; }    
 

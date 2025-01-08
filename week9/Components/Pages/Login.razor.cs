@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Components;
+using week9.Base;
 using week9.Model;
 
 namespace week9.Components.Pages
 {
-    public partial class Login
+    public partial class Login :ComponentBase
     {
-
         private User Users { get; set; } = new();
+
+        [Parameter] public Currency Currency { get; set; }
 
         private string ErrorMessage { get; set; } = string.Empty;
 
@@ -14,7 +17,7 @@ namespace week9.Components.Pages
         {
             if (UserService.Login(Users))
             {
-                Nav.NavigateTo("/home");
+                Nav.NavigateTo("/dashboard");
             }
 
             else
