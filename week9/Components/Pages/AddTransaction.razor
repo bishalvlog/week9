@@ -1,10 +1,9 @@
-﻿@page "/debt"
+﻿@page "/transaction"
 @using week9.Components.Dialog
 @using week9.Components.Layout
-@using week9.Model
 @using week9.Model.Constants
 
-@if(debts == null)
+@if(transactions == null)
 {
     <Loader/>
 }
@@ -12,34 +11,33 @@ else
 {
     <Back/>
     <MudPaper Class="p-4">
-        <MudText Typo="Typo.h5" GutterBottom>Manage Debts</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenDebtRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Debt</MudButton>
+        <MudText Typo="Typo.h5" GutterBottom>Manage Transaction</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" DropShadow="false" class="btn btn--md" OnClick="OpenTransactionRegister" Disabled="IsCreateModalOpen" ButtonType="ButtonType.Submit">Add Debt</MudButton>
         
         <div class="table-responsive">
             <table class="table country-table">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>SourceOfDebt</th>
-                        <th>DebtAmount</th>
-                        <th>DeuDate</th>
+                        <th>Title</th>
+                        <th>Transaction Amount</th>
+                        <th>Transaction Type</th>
                         <th>Tag</th>
-                        <th>Status</th>
+                        <th>Remark</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in debts)
+                    @foreach (var item in transactions)
                     {
                         <tr>
-                            <td>@(debts.IndexOf(item) + 1).</td>
-                            <td>@item.DebtSource</td>
-                            <td>@item.DebtAmount.ToString("C")</td>
-                            <td>@item.DueDate</td>
+                            <td>@(transactions.IndexOf(item) + 1).</td>
+                            <td>@item.Title</td>
+                            <td>@item.TransactionAmount.ToString("C")</td>
+                            <td>@item.TransactionType</td>
+                            <td>@item.TransactionDate</td>
                             <td>@item.Tag?.TagName</td>
-                            <td>
-                               @(item.IsCleard ? "Paid" : "Pending")
-                            </td>
+                            <td>@item.Remarks</td>
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
@@ -60,12 +58,12 @@ else
 
 @if (IsCreateModalOpen)
 {
-    <ModalLayout Module="Debt"
-                 Title="Add Debts"
-                 Description="Add a new Debts"
+    <ModalLayout Module="Transaction"
+                 Title="Add Transaction"
+                 Description="Add a new Transaction"
                  SubmitColor="Color.Primary"
                  Size="modal-lg"
-                 OnSave="AddRegisterDebt"
+                 OnSave="AddRegisterTransaction"
                  CancelLabel="Discard"
                  SubmitLabel="Save"
                  IsDisabled="IsCreateButtonDisabled"
@@ -73,31 +71,27 @@ else
                  IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField Label="Debt Source" @bind-Value="CreateDebtDto.DebtSource" Required="true" Variant="Variant.Outlined"/>
+                <MudTextField Label="Titles" @bind-Value="createTransaction.Title" Required="true" Variant="Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField Label="Debt Amount" @bind-Value="CreateDebtDto.DebtAmount" Required="true" Variant="Variant.Outlined"/>
+                <MudTextField Label="Transaction Amount" @bind-Value="createTransaction.TransactionAmount" Required="true" Variant="Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12">
-                <MudSelect T="Guid"  Label="Select a Tag" @bind-Value="CreateDebtDto.TagId" Variant="Variant.Outlined">
+                    <MudTextField Label="Transaction Type" @bind-Value="createTransaction.transactionType" Required="true" Variant="Variant.Outlined" />
+                </MudItem>
+                <MudItem xs="12">
+                <MudSelect T="Guid" Label="Select a Tag" @bind-Value="createTransaction.TagId" Variant="Variant.Outlined">
                     @if(Tags != null)
                     {
                         @foreach (var tag in Tags)
                         {
-                            
-                          <MudSelectItem T="Guid" Value="tag.Id">@tag.TagName</MudSelectItem>
-                            
+                          <MudSelectItem T="Guid" Value="tag.Id">@tag.TagName</MudSelectItem> 
                         }
                     }
                 </MudSelect>
                 </MudItem>
                 <MudItem xs="12">
-                    <MudDatePicker Label="Debt Date"
-                                   @bind-Date="CreateDebtDto.DueDate"
-                                   Placeholder="Select the debt date"
-                                   Variant="Variant.Outlined"
-                                   PickerVariant="PickerVariant.Dialog"
-                                   DateFormat="dd.MM.yyyy" />
+                    <MudTextField Label="Remark" @bind-Value="createTransaction.Remarks" Required="true" Variant="Variant.Outlined" />
                 </MudItem>
             </MudGrid>
     </ModalLayout>
@@ -106,24 +100,25 @@ else
 {
     <ModalLayout Module="Tag"
                  Title="Delete Tag"
-                 Description="Are you sure you want to delete this tag?"
+                 Description="Are you sure you want to delete this Transaction?"
                  SubmitColor="Color.Primary"
                  Size="modal-lg"
                  OnSave="@DeleteTag"
                  CancelLabel="Discard"
-                 SubmitLabel="@(DeleteDebt.IsActive ? "Deactivate" : "Activate")"
+                 SubmitLabel="@(DeleteTransaction.IsActive ? "Deactivate" : "Activate")"
                  IsDisabled="IsDeleteModalOpen"
                  IsVisible="@IsDeleteModalOpen"
                  IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
         <div class="text-center">
             <LoadIcon Height="200"
                       Width="200"
-                      Icon="@(DeleteDebt.IsActive ? Animations.Regular.Trash : Animations.Regular.Edit)"
+                      Icon="@(DeleteTransaction.IsActive ? Animations.Regular.Trash : Animations.Regular.Edit)"
                       State="hover-pinch"
                       Trigger="loop" />
             <MudText Class="hfs4 data fw-600">
-                Are you sure you want to @(DeleteDebt.IsActive ? "deactivate" : "activate") the following Tag?
+                Are you sure you want to @(DeleteTransaction.IsActive ? "deactivate" : "activate") the following Transaction?
             </MudText>
         </div>
     </ModalLayout>
 }
+

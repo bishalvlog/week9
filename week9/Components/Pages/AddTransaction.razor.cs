@@ -1,21 +1,21 @@
+
 using week9.Model;
 using week9.Model.Dto;
 
 namespace week9.Components.Pages
 {
-    public partial class AddDebt
+    public partial class AddTransaction
     {
-        private List<Debt>? debts { get; set; } = new();
+        private List<Transaction>? transactions { get; set; }
 
-        #region Oninitialize
+        #region OnInitialize
         protected override async Task OnInitializedAsync()
         {
-            await GetAllDebt();
+            await GetAllTransaction();
             await GetAllTags();
-
-            StateHasChanged();
         }
         #endregion
+
         private async Task OpenUpdateDebtModal(Guid TagId)
         {
             var response = UserDebt.GetById(TagId);
@@ -26,54 +26,39 @@ namespace week9.Components.Pages
             }
         }
 
-        #region GetAllDebt
-        private async Task GetAllDebt()
+        #region GetAllTransaction
+        private async Task GetAllTransaction()
         {
-            var response = UserDebt.GetAllDebt();
+            var response = UserTransaction.GetAllTransaction();
 
-            if (response is null)
+            if (response == null)
             {
                 return;
             }
 
-             debts = response;
-
-            StateHasChanged();
+            transactions = response;
         }
         #endregion
 
-        #region GetAll Tags
-        private List<Tag>? Tags { get; set; }
-        private async Task GetAllTags()
-        {
-            var response = UserTag.GetAllTag();
-
-            if(response is null)
-            {
-                return;
-            }
-
-            Tags = response;
-
-            StateHasChanged();
-        }
-        #endregion
-
-        #region AddDebt
+        #region Add Transaction
         private bool IsCreateButtonDisabled =>
-        string.IsNullOrEmpty(CreateDebtDto.DebtSource) || 
-        string.IsNullOrEmpty(CreateDebtDto.DebtAmount.ToString());               
+        string.IsNullOrEmpty(createTransaction.Title) ||
+        string.IsNullOrEmpty(createTransaction.TransactionDate.ToString()) ||
+        string.IsNullOrEmpty(createTransaction.transactionType.ToString()) ||
+        string.IsNullOrEmpty(createTransaction.Remarks);
 
-        private CreateDebtDto CreateDebtDto {  get; set; } = new();
-        private bool IsCreateModalOpen { get; set; }    
-        private void OpenDebtRegister()
+        private bool IsCreateModalOpen { get; set; }
+
+        private CreateTransactionDto createTransaction { get; set; } = new();
+
+        private void OpenTransactionRegister()
         {
             IsCreateModalOpen = true;
-            CreateDebtDto = new CreateDebtDto();
+            createTransaction = new CreateTransactionDto();
             StateHasChanged();
         }
 
-        private async Task AddRegisterDebt(bool isclosed)
+        private async Task AddRegisterTransaction(bool isclosed)
         {
             if (isclosed)
             {
@@ -83,7 +68,7 @@ namespace week9.Components.Pages
 
             try
             {
-                var result =  UserDebt.AddDebt(CreateDebtDto);
+                var result = UserTransaction.AddTransaction(createTransaction);
 
                 if (result is null)
                 {
@@ -98,14 +83,31 @@ namespace week9.Components.Pages
         }
         #endregion
 
+        #region GetAll Tags
+        private List<Tag>? Tags { get; set; }
+        private async Task GetAllTags()
+        {
+            var response = UserTag.GetAllTag();
+
+            if (response is null)
+            {
+                return;
+            }
+
+            Tags = response;
+
+            StateHasChanged();
+        }
+        #endregion
+
         #region Delete
         private bool IsDeleteModalOpen { get; set; }
 
-        private Debt DeleteDebt { get; set; } = new();
+        private Transaction DeleteTransaction { get; set; } = new();
 
         private async Task OpenDebtDeleteModal(Guid Id)
         {
-            var response = UserDebt.GetById(Id);
+            var response = UserTransaction.TransactionGetById(Id);
 
             if (response is null)
             {
@@ -113,7 +115,7 @@ namespace week9.Components.Pages
                 return;
             }
 
-            DeleteDebt = response;
+            DeleteTransaction = response;
 
             IsDeleteModalOpen = true;
 
@@ -130,7 +132,7 @@ namespace week9.Components.Pages
 
             try
             {
-                UserDebt.ActiveDeactive(DeleteDebt.Id);
+                UserTag.ActiveDeactive(DeleteTransaction.Id);
 
                 IsDeleteModalOpen = false;
             }
@@ -139,6 +141,6 @@ namespace week9.Components.Pages
                 //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
-      #endregion
+        #endregion
     }
 }

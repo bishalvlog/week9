@@ -13,21 +13,35 @@ namespace week9.Services
         {
             _debtList = LoadItems();
         }
+
+        public void ActiveDeactive(Guid Id)
+        {
+            var tag = _debtList.FirstOrDefault(t => t.Id == Id);
+
+            if (tag != null)
+            {
+                tag.IsActive = false;
+            }
+        }
+
         public async Task AddDebt(CreateDebtDto debt)
         {
             try
             {
                 var debtModel = new Debt()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     DebtSource = debt.DebtSource,
                     DebtAmount = debt.DebtAmount,
                     DebtDate = DateTime.Now,
                     IsActive = true,
                     IsCleard = false,
-                    DeuDate = debt.DeuDate, 
+                    DueDate = debt.DueDate, 
+                    TagId = debt.TagId,
                 };
 
+                _debtList.Add(debtModel);
+                SaveItems(_debtList);
             }
             catch (Exception ex) 
             {
@@ -37,7 +51,7 @@ namespace week9.Services
 
         public List<Debt> GetAllDebt()
         {
-           return _debtList.ToList();
+           return _debtList.Where(t => t.IsActive).ToList();
         }
 
         public Debt GetById(Guid id)

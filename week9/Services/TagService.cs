@@ -27,9 +27,7 @@ namespace week9.Services
 
         public async Task AddTag(CreateTagDto tag)
         {
-            try
-            {
-                var exists = _tags.FirstOrDefault<Tag>(t =>t.TagName == tag.TagName);
+             var exists = _tags.FirstOrDefault<Tag>(t =>t.TagName == tag.TagName);
 
                 if (exists != null)
                 {
@@ -38,18 +36,14 @@ namespace week9.Services
 
                 var tagModel = new Tag()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     IsActive = true,
                     TagName = tag.TagName,
                 };
+
                 _tags.Add(tagModel);
 
                 SaveItems(_tags);
-            }
-            catch(Exception ex)
-            {
-                throw new NotFoundException("some this is wrong");
-            }
         }
 
         public List<Tag> GetAllTag()

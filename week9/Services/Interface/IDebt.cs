@@ -10,5 +10,7 @@ namespace week9.Services.Interface
         List<Debt> GetAllDebt();
 
         Debt GetById(Guid id);
+
+        void ActiveDeactive(Guid Id);
     }
 }

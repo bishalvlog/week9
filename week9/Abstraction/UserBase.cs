@@ -27,6 +27,7 @@ namespace week9.Abstraction
             var json = File.ReadAllText(FilePath);
             return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
         }
+
         protected void SaveItems(List<T> items)
         { 
             var json = JsonSerializer.Serialize(items);

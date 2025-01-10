@@ -8,12 +8,12 @@
 
         public decimal DebtAmount { get; set; }
 
-        public DateTime DeuDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         public bool IsCleard { get; set; }
 
         public bool IsActive { get; set; }
 
-        public List<Tag> Debts { get; set; }
+        public Guid TagId { get; set; }
     }
 }
