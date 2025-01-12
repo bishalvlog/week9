@@ -43,7 +43,7 @@ else
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateDebtModal(item.Id)" />
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateModal(item.Id)" />
                                     </MudTooltip>
                                     <MudTooltip Text="@(item.IsActive ? "Deactive" : "Active")" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="@(item.IsActive ? "images/icons/document.svg" : "images/icons/delete.svg")" Alt="Status Icon" Height="18" Width="18" @onclick="() => OpenDebtDeleteModal(item.Id)" />
@@ -112,7 +112,6 @@ else
                  OnSave="@DeleteTag"
                  CancelLabel="Discard"
                  SubmitLabel="@(DeleteDebt.IsActive ? "Deactivate" : "Activate")"
-                 IsDisabled="IsDeleteModalOpen"
                  IsVisible="@IsDeleteModalOpen"
                  IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
         <div class="text-center">
@@ -125,5 +124,30 @@ else
                 Are you sure you want to @(DeleteDebt.IsActive ? "deactivate" : "activate") the following Tag?
             </MudText>
         </div>
+    </ModalLayout>
+}
+
+@if (IsUpdateModalOpen)
+{
+    <ModalLayout Module="Debts"
+                 Title="Update Debts"
+                 Description="Update an existing Debt to the system, by filling in the following form."
+                 SubmitColor="Color.Primary"
+                 Size="modal-lg"
+                 OnSave="@UpdateTag"
+                 IsVisible="true"
+                 CancelLabel="Discard"
+                 SubmitLabel="Submit">
+        <MudGrid class="mt-n4" Spacing=8>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateDebtDto.DebtSource" Label="Debt Source" For="@(() => UpdateDebtDto.DebtSource)" Variant="Variant.Outlined" Placeholder="Enter the Debt Source " Immediate="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateDebtDto.DebtAmount" Label="Debt DebtAmout" For="@(() => UpdateDebtDto.DebtAmount)" Variant="Variant.Outlined" Placeholder="Enter the Debt Amout " Immediate="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Date="UpdateDebtDto.DebtDate" Label="Debt Date" For="@(() => UpdateDebtDto.DebtDate)" Variant="Variant.Outlined" Placeholder="Enter the Debt Date " Immediate="true" />
+            </MudItem>
+        </MudGrid>
     </ModalLayout>
 }

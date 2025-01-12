@@ -109,19 +109,18 @@ else
 
 @if(IsUpdateModalOpen)
 {
-    <ModalLayout T="@createTagDto"
-                    Module="Tag"
+    <ModalLayout Module="Tag"
                     Title="Update Tag"
-                    Description="Update an existing organization to the system, by filling in the following form."
+                    Description="Update an existing Tag to the system, by filling in the following form."
                     SubmitColor="Color.Primary"
                     Size="modal-lg"
                     OnSave="@UpdateTag"
-                    IsDisabled="IsTagButtonDisabled"
+                    IsVisible="true"
                     CancelLabel="Discard"
                     SubmitLabel="Submit">
         <MudGrid class="mt-n4" Spacing=8>
             <MudItem xs=12>
-                <MudTextField @bind-Value="UpdateTagDto.TagName" Label="Name" For="@(() => UpdateTagDto.TagName)" Variant="Variant.Outlined" Placeholder="Enter the Organization Name " Immediate="true"/>
+                <MudTextField @bind-Value="UpdateTagDto.TagName" Label="Name" For="@(() => UpdateTagDto.TagName)" Variant="Variant.Outlined" Placeholder="Enter the Custome Tag Name " Immediate="true"/>
             </MudItem>
         </MudGrid>
     </ModalLayout>

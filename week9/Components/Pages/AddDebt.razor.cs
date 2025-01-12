@@ -16,15 +16,6 @@ namespace week9.Components.Pages
             StateHasChanged();
         }
         #endregion
-        private async Task OpenUpdateDebtModal(Guid TagId)
-        {
-            var response = UserDebt.GetById(TagId);
-
-            if (response is null)
-            {
-                // SnackbarService.ShowSnackbar(response.Message?? Constant.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
-            }
-        }
 
         #region GetAllDebt
         private async Task GetAllDebt()
@@ -139,6 +130,74 @@ namespace week9.Components.Pages
                 //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
-      #endregion
+        #endregion
+
+        #region Update Debts
+        private bool IsUpdateModalOpen { get; set; }
+
+        private UpdateDebtDto UpdateDebtDto { get; set; } = new();
+
+        private Debt GetDebtDto { get; set; } = new();
+
+        private bool IsDebtButtonDisabled =>
+            string.IsNullOrEmpty(UpdateDebtDto.DebtSource) ||
+            string.IsNullOrEmpty(UpdateDebtDto.DueDate.ToString()) ||
+            string.IsNullOrEmpty(UpdateDebtDto.DebtAmount.ToString()) ||
+            string.IsNullOrEmpty(UpdateDebtDto.Tag?.TagName);
+
+        private async Task OpenUpdateModal(Guid debtId)
+        {
+            var response = UserDebt.GetById(debtId);
+
+            if (response is null)
+            {
+                return;
+            }
+
+            GetDebtDto = response;
+
+            UpdateDebtDto = new UpdateDebtDto()
+            {
+                Id = GetDebtDto.Id,
+                DebtSource = GetDebtDto.DebtSource,
+                DebtDate = GetDebtDto.DebtDate,
+                DebtAmount = GetDebtDto.DebtAmount
+            };
+
+            OpenCloseEditModal();
+            StateHasChanged();
+        }
+
+        private void OpenCloseEditModal()
+        {
+            IsUpdateModalOpen = !IsUpdateModalOpen;
+
+            StateHasChanged();
+        }
+
+        private async Task UpdateTag(bool isClosed)
+        {
+            if (isClosed)
+            {
+                IsUpdateModalOpen = false;
+                return;
+            }
+
+            try
+            {
+                var result = UserDebt.UpdateDebt(UpdateDebtDto);
+
+                if (result is null)
+                {
+                    //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                // SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
+            }
+        }
+        #endregion
     }
 }

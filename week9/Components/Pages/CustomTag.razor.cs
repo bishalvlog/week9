@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Components;
 using week9.Model;
 using week9.Model.Dto;
 
 namespace week9.Components.Pages
 {
-    public partial class CustomTag
+    public partial class CustomTag : ComponentBase
     {
         private List<Tag>? Tags { get; set; }
 
@@ -134,6 +135,7 @@ namespace week9.Components.Pages
             {
                 Id = GetTagDto.Id,
                 TagName = GetTagDto.TagName,
+                IsActive = GetTagDto.IsActive
             };
 
             OpenCloseEditModal();

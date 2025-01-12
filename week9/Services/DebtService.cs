@@ -58,5 +58,15 @@ namespace week9.Services
         {
             return _debtList.FirstOrDefault(d => d.Id == id);
         }
+
+        public async Task UpdateDebt(UpdateDebtDto debt)
+        {
+            UpdateItem(t => t.Id == debt.Id, t =>
+            {
+                t.DebtSource = debt.DebtSource;
+                t.DebtDate = debt.DebtDate;
+                t.DebtAmount = debt.DebtAmount;
+            });
+        }
     }
 }
