@@ -12,7 +12,7 @@ namespace week9.Model
 
         public DateTime? TransactionDate { get; set; }
 
-        public TransactonType TransactionType { get; set; }
+        public int TransactionType { get; set; }
 
         public bool IsActive { get; set; }
 

@@ -1,6 +1,4 @@
-﻿using week9.Base;
-
-namespace week9.Model.Dto
+﻿namespace week9.Model.Dto
 {
     public class CreateTransactionDto
     {
@@ -12,7 +10,7 @@ namespace week9.Model.Dto
 
         public DateTime? TransactionDate { get; set; }
 
-        public TransactonType transactionType { get; set; }
+        public int TransactionType { get; set; }
 
         public string Remarks { get; set; }
 

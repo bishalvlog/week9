@@ -33,5 +33,22 @@ namespace week9.Abstraction
             var json = JsonSerializer.Serialize(items);
             File.WriteAllText(FilePath, json);
         }
+
+        protected bool UpdateItem(Func<T, bool> predicate, Action<T> updateAction)
+        {
+            var items = LoadItems();
+
+            var item = items.FirstOrDefault(predicate);
+
+            if (item == null)
+            {
+                return false; 
+            }
+            updateAction(item);
+
+            SaveItems(items);
+
+            return true;
+        }
     }
 }

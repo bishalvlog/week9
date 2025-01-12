@@ -89,10 +89,9 @@ else
                     Description="Are you sure you want to delete this tag?"
                     SubmitColor="Color.Primary"
                     Size="modal-lg"
-                    OnSave="@DeleteTag"
+                     OnSave="@(() => DeleteTag(!DeleteTags.IsActive))"
                     CancelLabel="Discard"
                     SubmitLabel="@(DeleteTags.IsActive ? "Deactivate" : "Activate")"
-                    IsDisabled="IsDeleteModalOpen"
                     IsVisible="@IsDeleteModalOpen"
                     IsVisibleChanged="@((bool value) => IsDeleteModalOpen = value)">
         <div class="text-center">
@@ -102,10 +101,29 @@ else
                         State="hover-pinch"
                         Trigger="loop" />
             <MudText Class="hfs4 data fw-600">
-                Are you sure you want to @(DeleteTags.IsActive ? "deactivate" : "activate") the following Debt?
+                Are you sure you want to @(DeleteTags.IsActive ? "deactivate" : "activate") the following Tag?
             </MudText>
         </div>
     </ModalLayout>
 }
 
+@if(IsUpdateModalOpen)
+{
+    <ModalLayout T="@createTagDto"
+                    Module="Tag"
+                    Title="Update Tag"
+                    Description="Update an existing organization to the system, by filling in the following form."
+                    SubmitColor="Color.Primary"
+                    Size="modal-lg"
+                    OnSave="@UpdateTag"
+                    IsDisabled="IsTagButtonDisabled"
+                    CancelLabel="Discard"
+                    SubmitLabel="Submit">
+        <MudGrid class="mt-n4" Spacing=8>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="UpdateTagDto.TagName" Label="Name" For="@(() => UpdateTagDto.TagName)" Variant="Variant.Outlined" Placeholder="Enter the Organization Name " Immediate="true"/>
+            </MudItem>
+        </MudGrid>
+    </ModalLayout>
+}
 

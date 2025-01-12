@@ -68,7 +68,6 @@ else
                  OnSave="AddRegisterDebt"
                  CancelLabel="Discard"
                  SubmitLabel="Save"
-                 IsDisabled="IsCreateButtonDisabled"
                  IsVisible="@IsCreateModalOpen"
                  IsVisibleChanged="@((bool value) => IsCreateModalOpen = value)">
             <MudGrid>
@@ -102,6 +101,7 @@ else
             </MudGrid>
     </ModalLayout>
 }
+
 @if (IsDeleteModalOpen)
 {
     <ModalLayout Module="Tag"

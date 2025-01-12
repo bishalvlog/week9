@@ -11,6 +11,8 @@ namespace week9.Services.Interface
 
         Task AddTag(CreateTagDto tag);
 
-        void ActiveDeactive(Guid Id);
+        void ActiveDeactive(Guid Id, bool isActive);
+
+        Task UpdateTag(UpdateTagDto tag);
     }
 }

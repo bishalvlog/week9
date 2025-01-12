@@ -44,7 +44,7 @@ namespace week9.Components.Pages
         private bool IsCreateButtonDisabled =>
         string.IsNullOrEmpty(createTransaction.Title) ||
         string.IsNullOrEmpty(createTransaction.TransactionDate.ToString()) ||
-        string.IsNullOrEmpty(createTransaction.transactionType.ToString()) ||
+        string.IsNullOrEmpty(createTransaction.TransactionType.ToString()) ||
         string.IsNullOrEmpty(createTransaction.Remarks);
 
         private bool IsCreateModalOpen { get; set; }
@@ -122,17 +122,11 @@ namespace week9.Components.Pages
             StateHasChanged();
         }
 
-        private async Task DeleteTag(bool isClosed)
+        private async Task DeleteTrans(bool isActive)
         {
-            if (isClosed)
-            {
-                IsDeleteModalOpen = false;
-                return;
-            }
-
             try
             {
-                UserTag.ActiveDeactive(DeleteTransaction.Id);
+                UserTransaction.ActiveDeactive(DeleteTransaction.Id, isActive);
 
                 IsDeleteModalOpen = false;
             }

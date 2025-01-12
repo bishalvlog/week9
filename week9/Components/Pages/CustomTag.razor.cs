@@ -1,3 +1,4 @@
+using MudBlazor;
 using week9.Model;
 using week9.Model.Dto;
 
@@ -10,7 +11,8 @@ namespace week9.Components.Pages
         #region OnIntialized
         protected override async Task OnInitializedAsync()
         {
-           await GetAllTags();
+            StateHasChanged();
+            await GetAllTags();
         }
         #endregion
 
@@ -105,23 +107,80 @@ namespace week9.Components.Pages
             StateHasChanged();
         }
 
-        private async Task DeleteTag(bool isClosed)
+        private async Task DeleteTag(bool isActive)
         {
-            if (isClosed)
-            {
-                IsDeleteModalOpen = false;
-                return;
-            }
-
             try
             {
-                UserTag.ActiveDeactive(DeleteTags.Id);
+                UserTag.ActiveDeactive(DeleteTags.Id, isActive);
 
                 IsDeleteModalOpen = false;
             }
             catch (Exception ex)
             {
                 //SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
+            }
+        }
+        #endregion
+
+        #region Update CustomTag
+        private bool IsUpdateModalOpen { get; set; }
+
+        private UpdateTagDto UpdateTagDto { get; set; } = new();
+
+        private Tag GetTagDto { get; set; } = new();
+
+        private bool IsTagButtonDisabled =>
+            string.IsNullOrEmpty(UpdateTagDto.TagName);
+
+        private async Task OpenUpdateOrganizationModal(Guid tagId)
+        {
+            var response = UserTag.TagGetById(tagId);
+
+            if (response is null)
+            { 
+                return;
+            }
+
+            GetTagDto = response;
+
+            UpdateTagDto = new UpdateTagDto()
+            {
+                Id = GetTagDto.Id,
+                TagName = GetTagDto.TagName,
+            };
+
+            OpenCloseEditModal();
+            StateHasChanged();
+        }
+
+        private void OpenCloseEditModal()
+        {
+            IsUpdateModalOpen = !IsUpdateModalOpen;
+
+            StateHasChanged();
+        }
+
+        private async Task UpdateTag(bool isClosed)
+        {
+            if (isClosed)
+            {
+                IsUpdateModalOpen = false;
+                return;
+            }
+
+            try
+            {
+                var result =  UserTag.UpdateTag(UpdateTagDto);
+
+                if (result is null)
+                {
+                    //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+               // SnackbarService.ShowSnackbar(ex.Message, Severity.Error, Variant.Outlined);
             }
         }
         #endregion

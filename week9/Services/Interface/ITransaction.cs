@@ -11,6 +11,6 @@ namespace week9.Services.Interface
 
         Task AddTransaction(CreateTransactionDto createTransaction);
 
-        void ActiveDeactive(Guid Id);
+        void ActiveDeactive(Guid Id, bool isActive);
     }
 }

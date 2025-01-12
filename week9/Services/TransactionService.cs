@@ -15,14 +15,9 @@ namespace week9.Services
             _transactions = LoadItems();
         }
 
-        public void ActiveDeactive(Guid Id)
+        public void ActiveDeactive(Guid Id, bool isActive)
         {
-            var transaction = _transactions.FirstOrDefault(t => t.Id == Id);
-
-            if (transaction != null)
-            {
-                transaction.IsActive = false;
-            }
+            var success = UpdateItem(t => t.Id == Id, t => t.IsActive = isActive);
         }
 
         public async Task AddTransaction(CreateTransactionDto createTransaction)
@@ -38,6 +33,7 @@ namespace week9.Services
                     IsActive = true,
                     Remarks = createTransaction.Remarks,
                     TagId = createTransaction.TagId,
+                    TransactionType = createTransaction.TransactionType,
                 };
 
                 _transactions.Add(modelTransaction);
@@ -52,7 +48,7 @@ namespace week9.Services
 
         public List<Transaction> GetAllTransaction()
         {
-           return _transactions.Where(t => t.IsActive).ToList();
+           return _transactions.ToList();
         }
 
         public Transaction TransactionGetById(Guid Id)

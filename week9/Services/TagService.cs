@@ -15,14 +15,9 @@ namespace week9.Services
             _tags = LoadItems();
         }
 
-        public void ActiveDeactive(Guid Id)
+        public void ActiveDeactive(Guid Id, bool isActive)
         {
-            var tag = _tags.FirstOrDefault(t => t.Id == Id);
-
-            if(tag != null)
-            {
-                tag.IsActive = false;
-            }
+            var success = UpdateItem(t => t.Id == Id,t => t.IsActive = isActive);
         }
 
         public async Task AddTag(CreateTagDto tag)
@@ -63,6 +58,14 @@ namespace week9.Services
             {
                 throw new Exception("An error occurred while fetching the tag by ID.", ex);
             }
+        }
+
+        public async Task UpdateTag(UpdateTagDto tag)
+        {
+            UpdateItem(t => t.Id == tag.Id, t =>
+            {
+                t.TagName = tag.TagName;
+            });
         }
     }
 }
