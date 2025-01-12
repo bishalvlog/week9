@@ -1,4 +1,3 @@
-using MudBlazor;
 using week9.Model;
 using week9.Model.Dto;
 
@@ -30,18 +29,6 @@ namespace week9.Components.Pages
             Tags = response;
 
             StateHasChanged();
-        }
-        #endregion
-
-        #region UpdateTag
-        private async Task OpenUpdateTagModal(Guid TagId)
-        {
-            var response =  UserTag.TagGetById(TagId);
-
-            if (response is null)
-            {
-               // SnackbarService.ShowSnackbar(response.Message?? Constant.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
-            }
         }
         #endregion
 
@@ -132,7 +119,7 @@ namespace week9.Components.Pages
         private bool IsTagButtonDisabled =>
             string.IsNullOrEmpty(UpdateTagDto.TagName);
 
-        private async Task OpenUpdateOrganizationModal(Guid tagId)
+        private async Task OpenUpdateModal(Guid tagId)
         {
             var response = UserTag.TagGetById(tagId);
 

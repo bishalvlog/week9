@@ -43,7 +43,7 @@ else
                             <td>
                                 <div class="action">
                                     <MudTooltip Text="Edit" Color="Color.Primary" Arrow="true">
-                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateTagModal(item.Id)" />
+                                        <MudImage Src="images/icons/edit.svg" Alt="Edit Icon" Height="18" Width="18" @onclick="() => OpenUpdateModal(item.Id)" />
                                     </MudTooltip>
                                     <MudTooltip Text="@(item.IsActive ? "Deactivate" : "Activate")" Color="Color.Primary" Arrow="true">
                                         <MudImage Src="@(item.IsActive ? "images/icons/delete.svg" : "images/icons/document.svg")" Alt="Bin Icon" Height="18" Width="18" @onclick="() => OpenTagDeleteModal(item.Id)" />
