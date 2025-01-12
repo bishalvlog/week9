@@ -1,9 +1,10 @@
 ﻿@page "/dashboard"
+@using week9.Base
 @using week9.Components.Layout
+@using week9.Model
 
 <MudContainer>
     <div>
-
         <MudGrid>
             <MudItem xs="12" sm="4" md="3">
                 <NavMenu />
@@ -12,7 +13,51 @@
                 <MudCard>
                     <MudCardContent>
                         <h1>Welcome to the Dashboard</h1>
-                        <p>Here is your main content.</p>
+                        <MudText Typo="Typo.h6" Align="Align.Right">Current Balance: @CurrentBalance.ToString("C")</MudText>
+                        <MudGrid>
+                            <MudItem xs="12" sm="6">
+                                <MudPaper Class="pa-4">
+                                    <DonutChart T="Transaction" Items="transactions" XValue="@(e => e.Title)" YValue="@(e => e.TransactionAmount)" />
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                @if (transactions == null)
+                                {
+                                    <Loader />
+                                }
+                                else
+                                {
+                                    <MudPaper Class="p-4">
+                                        <MudText Typo="Typo.h5" GutterBottom>Top 5 Highet Transaction</MudText>
+                                        <div class="table-responsive">
+                                            <table class="table country-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Title</th>
+                                                        <th>Date</th>
+                                                        <th>Transaction Amount</th>
+                                                        <th>Transaction Type</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in transactions)
+                                                    {
+                                                        <tr>
+                                                            <td>@(transactions.IndexOf(item) + 1).</td>
+                                                            <td>@item.Title</td>
+                                                            <td>@item.TransactionDate</td>
+                                                            <td>@item.TransactionAmount.ToString("C")</td>
+                                                            <td>@Enum.GetName(typeof(TransactonType), item.TransactionType)</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </MudPaper>
+                                }
+                            </MudItem>
+                        </MudGrid>
                     </MudCardContent>
                 </MudCard>
             </MudItem>

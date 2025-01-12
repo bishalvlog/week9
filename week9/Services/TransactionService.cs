@@ -1,4 +1,5 @@
 ﻿using week9.Abstraction;
+using week9.Base;
 using week9.Model;
 using week9.Model.Dto;
 using week9.Model.Exception;
@@ -46,9 +47,30 @@ namespace week9.Services
             }
         }
 
+        public async Task<Decimal> CurrentBalance()
+        {
+            var transaction = GetAllTransaction();
+
+            var totalCredit = transaction.Where(t => t.TransactionType == 4)           
+                             .Sum(t => t.TransactionAmount);
+
+            var totalDebit = transaction.Where(t => t.TransactionType == 5)
+                            .Sum(t => t.TransactionAmount);
+
+            var currentBalance = totalCredit - totalDebit;
+
+            return currentBalance;
+        }
+
         public List<Transaction> GetAllTransaction()
         {
            return _transactions.ToList();
+        }
+
+        public async Task<List<Transaction>> HighestTransaction()
+        {
+            var transaction =  GetAllTransaction();
+            return transaction.OrderByDescending(t => t.TransactionAmount).Take(5).ToList();
         }
 
         public Transaction TransactionGetById(Guid Id)

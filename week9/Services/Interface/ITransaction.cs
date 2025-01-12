@@ -12,5 +12,9 @@ namespace week9.Services.Interface
         Task AddTransaction(CreateTransactionDto createTransaction);
 
         void ActiveDeactive(Guid Id, bool isActive);
+
+        Task<List<Transaction>> HighestTransaction();
+
+        Task<Decimal> CurrentBalance();
     }
 }
