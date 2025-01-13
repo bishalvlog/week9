@@ -3,6 +3,7 @@
     public enum TransactonType
     {
         Credit = 4,
-        Debit =5
+        Debit =5,
+        Debt =6
     }
 }

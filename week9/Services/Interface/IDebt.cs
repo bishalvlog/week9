@@ -13,6 +13,6 @@ namespace week9.Services.Interface
 
         void ActiveDeactive(Guid Id);
 
-        Task UpdateDebt (UpdateDebtDto debt);
+        Task UpdateDebt(UpdateDebtDto debt);
     }
 }

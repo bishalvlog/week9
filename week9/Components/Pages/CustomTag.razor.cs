@@ -65,6 +65,9 @@ namespace week9.Components.Pages
                     return;
                 }
 
+                IsCreateModalOpen = false;
+                StateHasChanged();
+
             }
             catch (Exception ex) 
             {

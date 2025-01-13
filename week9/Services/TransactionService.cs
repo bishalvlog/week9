@@ -57,7 +57,11 @@ namespace week9.Services
             var totalDebit = transaction.Where(t => t.TransactionType == 5)
                             .Sum(t => t.TransactionAmount);
 
-            var currentBalance = totalCredit - totalDebit;
+            var totalDebt = transaction.Where(t => t.TransactionType == 6).Sum(t => t.TransactionAmount);
+
+            var sumofTransaction = totalCredit - totalDebit;
+
+            var currentBalance = sumofTransaction + totalDebt;
 
             return currentBalance;
         }

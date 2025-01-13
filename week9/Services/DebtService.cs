@@ -1,4 +1,5 @@
 ﻿using week9.Abstraction;
+using week9.Base;
 using week9.Model;
 using week9.Model.Dto;
 using week9.Model.Exception;
@@ -9,19 +10,20 @@ namespace week9.Services
     public class DebtService : UserBase<Debt>, IDebt
     {
         private List<Debt> _debtList;
-        public DebtService() : base("Debt.json")
+
+        private readonly ITransaction _transaction;
+        public DebtService(ITransaction transaction) : base("Debt.json")
         {
             _debtList = LoadItems();
+            _transaction = transaction;
         }
 
         public void ActiveDeactive(Guid Id)
         {
-            var tag = _debtList.FirstOrDefault(t => t.Id == Id);
-
-            if (tag != null)
+            UpdateItem(t => t.Id == Id, t =>
             {
-                tag.IsActive = false;
-            }
+                t.IsActive = false;
+            });
         }
 
         public async Task AddDebt(CreateDebtDto debt)
@@ -42,6 +44,18 @@ namespace week9.Services
 
                 _debtList.Add(debtModel);
                 SaveItems(_debtList);
+
+                var transaction = new CreateTransactionDto
+                {
+                    Title = $"debt Add : {debt.DebtSource}",
+                    TransactionAmount = debt.DebtAmount,
+                    TransactionDate = DateTime.Now,
+                    TransactionType = (int)TransactonType.Debt,
+                    TagId = debt.TagId,
+                    Remarks = "Add Debts "
+                };
+
+                await _transaction.AddTransaction(transaction);
             }
             catch (Exception ex) 
             {
