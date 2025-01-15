@@ -16,5 +16,9 @@ namespace week9.Services.Interface
         Task<List<Transaction>> HighestTransaction();
 
         Task<Decimal> CurrentBalance();
+
+        Task<List<Transaction>> SearchUser(FilterDto filter);
+
+        Task UpdateTransaction(UpdateTransactionDto updateTransactionDto);
     }
 }

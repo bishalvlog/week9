@@ -1,5 +1,4 @@
 ﻿using week9.Abstraction;
-using week9.Base;
 using week9.Model;
 using week9.Model.Dto;
 using week9.Model.Exception;
@@ -68,7 +67,7 @@ namespace week9.Services
 
         public List<Transaction> GetAllTransaction()
         {
-           return _transactions.ToList();
+           return _transactions.Where(t => t.IsActive).OrderByDescending(t => t.Id).ToList();
         }
 
         public async Task<List<Transaction>> HighestTransaction()
@@ -77,9 +76,54 @@ namespace week9.Services
             return transaction.OrderByDescending(t => t.TransactionAmount).Take(5).ToList();
         }
 
+        public async Task<List<Transaction>> SearchUser(FilterDto filterDto)
+        {
+            try
+            {
+                var query = _transactions.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(filterDto.Title))
+                {
+                    query = query.Where(t => t.Title != null &&
+                                    t.Title.Contains(filterDto.Title, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (filterDto.TransactionDate.HasValue)
+                {
+                    query = query.Where(t => t.TransactionDate.HasValue && t.TransactionDate.Value.Date == filterDto.TransactionDate.Value.Date);
+                }
+
+                if(filterDto.StartDate.HasValue && filterDto.EndDate.HasValue)
+                {
+                    query = query.Where(t => t.TransactionDate.HasValue && t.TransactionDate.Value.Date >= filterDto.StartDate.Value.Date &&
+                                        t.TransactionDate.Value.Date <= filterDto.EndDate.Value.Date);
+                }
+
+                var result = query.ToList();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new NotFoundException("An error occurred while searching for the user.");
+            }
+        }
+
         public Transaction TransactionGetById(Guid Id)
         {
             return _transactions.FirstOrDefault(t => t.Id == Id);
+        }
+
+        public async Task UpdateTransaction(UpdateTransactionDto updateTransactionDto)
+        {
+            UpdateItem(t => t.Id == updateTransactionDto.Id, t =>
+            {
+                t.Title = updateTransactionDto.Title;
+                t.TransactionAmount = updateTransactionDto.TransactionAmount;
+                t.TransactionDate = updateTransactionDto.TransactionDate;
+                t.TransactionType = updateTransactionDto.TransactionType;
+                t.Remarks = updateTransactionDto.Remarks;
+            });
         }
     }
 }

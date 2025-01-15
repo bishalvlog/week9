@@ -169,6 +169,7 @@ namespace week9.Components.Pages
                     //SnackbarService.ShowSnackbar(result?.Message ?? Constants.Message.ExceptionMessage, Severity.Error, Variant.Outlined);
                     return;
                 }
+                IsUpdateModalOpen = false;
             }
             catch (Exception ex)
             {

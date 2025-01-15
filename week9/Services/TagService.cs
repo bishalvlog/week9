@@ -43,7 +43,12 @@ namespace week9.Services
 
         public List<Tag> GetAllTag()
         {
-            return _tags.ToList();
+            return _tags.OrderByDescending(t => t.IsActive).ToList();
+        }
+
+        public List<Tag> GetAllTagUseByOther()
+        {
+            return _tags.Where(t => t.IsActive).OrderByDescending(t => t.Id).ToList();
         }
 
         public Tag TagGetById(Guid Id)

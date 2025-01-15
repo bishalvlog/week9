@@ -10,6 +10,7 @@ namespace week9.Components.Pages
         {
             await Highest();
             await CurrentAmount();
+            await PendingDebts();
         }
         #endregion
 
@@ -42,6 +43,22 @@ namespace week9.Components.Pages
             }
 
             CurrentBalance = response;
+        }
+        #endregion
+
+        #region PendingDebts
+
+        private List<Debt>? RemainingDebt { get; set; } = [];
+        private async Task PendingDebts()
+        {
+            var response = await UserDebt.RemainingDebt();
+
+            if (response is null) 
+            {
+                return;
+            }
+
+            RemainingDebt = response;
         }
         #endregion
     }

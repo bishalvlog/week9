@@ -81,6 +81,26 @@ namespace week9.Services
                 t.DebtDate = debt.DebtDate;
                 t.DebtAmount = debt.DebtAmount;
             });
+
+            var transaction = new UpdateTransactionDto
+            {
+                Title = $"debt Add : {debt.DebtSource}",
+                TransactionAmount = debt.DebtAmount,
+                TransactionDate = DateTime.Now,
+                TransactionType = (int)TransactonType.Debt,
+                Remarks = "Add Debts "
+            };
+
+            await _transaction.UpdateTransaction(transaction);
+        }
+
+        public async Task<List<Debt>> RemainingDebt()
+        {
+           var pending = GetAllDebt();
+
+            var pendingDebts = pending.Where(d => !d.IsCleard);
+
+            return pendingDebts.OrderByDescending(t => t.DebtAmount).Take(5).ToList();
         }
     }
 }

@@ -91,7 +91,7 @@ namespace week9.Components.Pages
         private List<Tag>? Tags { get; set; }
         private async Task GetAllTags()
         {
-            var response = UserTag.GetAllTag();
+            var response = UserTag.GetAllTagUseByOther();
 
             if (response is null)
             {
@@ -140,5 +140,14 @@ namespace week9.Components.Pages
             }
         }
         #endregion
+
+        /*#region Filter 
+        private List<FilterDto> Filters { get; set; } = new();
+        private async Task Filter()
+        {
+            var response = await UserTransaction.SearchUser(Filters);
+
+        }
+        #endregion*/
     }
 }

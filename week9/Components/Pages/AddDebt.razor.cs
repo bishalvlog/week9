@@ -12,7 +12,6 @@ namespace week9.Components.Pages
         {
             await GetAllDebt();
             await GetAllTags();
-
             StateHasChanged();
         }
         #endregion
@@ -37,7 +36,7 @@ namespace week9.Components.Pages
         private List<Tag>? Tags { get; set; }
         private async Task GetAllTags()
         {
-            var response = UserTag.GetAllTag();
+            var response = UserTag.GetAllTagUseByOther();
 
             if(response is null)
             {

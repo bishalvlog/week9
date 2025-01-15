@@ -146,7 +146,7 @@ else
                 <MudTextField @bind-Value="UpdateDebtDto.DebtAmount" Label="Debt DebtAmout" For="@(() => UpdateDebtDto.DebtAmount)" Variant="Variant.Outlined" Placeholder="Enter the Debt Amout " Immediate="true" />
             </MudItem>
             <MudItem xs=12>
-                <MudTextField @bind-Date="UpdateDebtDto.DebtDate" Label="Debt Date" For="@(() => UpdateDebtDto.DebtDate)" Variant="Variant.Outlined" Placeholder="Enter the Debt Date " Immediate="true" />
+                <MudDatePicker @bind-Date="UpdateDebtDto.DueDate" Label="Debt Date" For="@(() => UpdateDebtDto.DebtDate)" Variant="Variant.Outlined" Placeholder="Enter the Debt Date " Immediate="true" />
             </MudItem>
         </MudGrid>
     </ModalLayout>

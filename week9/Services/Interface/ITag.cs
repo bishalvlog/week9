@@ -14,5 +14,7 @@ namespace week9.Services.Interface
         void ActiveDeactive(Guid Id, bool isActive);
 
         Task UpdateTag(UpdateTagDto tag);
+
+        List<Tag> GetAllTagUseByOther();
     }
 }
