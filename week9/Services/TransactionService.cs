@@ -67,7 +67,7 @@ namespace week9.Services
 
         public List<Transaction> GetAllTransaction()
         {
-           return _transactions.Where(t => t.IsActive).OrderByDescending(t => t.Id).ToList();
+            return _transactions.Where(t => t.IsActive).OrderByDescending(t => t.Id).ToList();
         }
 
         public async Task<List<Transaction>> HighestTransaction()

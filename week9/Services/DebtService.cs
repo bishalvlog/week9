@@ -100,7 +100,7 @@ namespace week9.Services
 
             var pendingDebts = pending.Where(d => !d.IsCleard);
 
-            return pendingDebts.OrderByDescending(t => t.DebtAmount).Take(5).ToList();
+            return pendingDebts.OrderBy(t => t.DebtDate).Take(5).ToList();
         }
     }
 }
